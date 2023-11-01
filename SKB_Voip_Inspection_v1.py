@@ -211,6 +211,22 @@ for file_num in range(len(file_list)):
                 break
             else:
                 pass
+        
+        for search_slot in range(len(log_line)):
+            module_pattern = r'^\s+\d+\s+\d+\s+((\w+|\w+\W\w+)\s)+(\W\w+\W)*\s+'
+            module_result = re.search(module_pattern, log_line[search_slot])
+            if module_result != None:
+                module_pattern = r'^\s[^12]'
+                module_result = re.search(module_pattern, module_result.group())
+                if module_result != None:
+                    module_result = module_result.group()
+                    module_result = module_result.strip()
+                    lc_slot.append(module_result)
+                else:
+                    pass
+            else:
+                pass
+
         #print(hostname)
         #print("%s %s %s" %(high_lcnum, high_lcpid, compare_result))
 
