@@ -61,8 +61,17 @@ for file_num in range(len(file_list)):
                 break
             else:
                 pass
-        os.rename("%s" %file_list[file_num],"%s.txt" %hostname)
-        #print("Filename %s -> %s.txt" %(file_list[file_num], hostname))
+
+        if os.path.exists("%s\%s.txt" %(str(nextdir),hostname)) == True:
+            if file_list[file_num] != "%s.txt" %hostname:
+                os.remove("%s\%s" %(str(nextdir),file_list[file_num]))
+                print("####### remove %s(%s) #######" %(hostname, file_list[file_num]))
+        else:
+            os.rename("%s" %file_list[file_num],"%s.txt" %hostname)
+
+        #os.rename("%s" %file_list[file_num],"%s.txt" %hostname)
+        print("Filename %s -> %s.txt" %(file_list[file_num], hostname))
+
     else:
         for host_parsing in range(len(log_line)):
             host_pattern = r'^.*#show version$'
@@ -74,8 +83,16 @@ for file_num in range(len(file_list)):
                 break
             else:
                 pass
-        os.rename("%s" %file_list[file_num],"%s.txt" %hostname)
-        #print("Filename %s -> %s.txt" %(file_list[file_num], hostname))
+
+        if os.path.exists("%s\%s.txt" %(str(nextdir),hostname)) == True:
+            if file_list[file_num] != "%s.txt" %hostname:
+                os.remove("%s\%s" %(str(nextdir),file_list[file_num]))
+                print("####### remove %s(%s) #######" %(hostname, file_list[file_num]))
+        else:
+            os.rename("%s" %file_list[file_num],"%s.txt" %hostname)
+
+        #os.rename("%s" %file_list[file_num],"%s.txt" %hostname)
+        print("Filename %s -> %s.txt" %(file_list[file_num], hostname))
 
         for hw_parsing in range(len(log_line)):
             hw_pattern = r'^PID:\s.*\s*.*$'
