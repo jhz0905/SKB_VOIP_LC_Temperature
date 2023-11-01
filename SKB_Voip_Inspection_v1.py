@@ -31,6 +31,8 @@ for file_num in range(len(file_list)):
     lc_slot = list()
     lc_tem = list()
     lc_name = list()
+    thnf = 95
+    thes = 86
 
     log_file = open("%s" %file_list[file_num], "r")
     log_line = log_file.readlines()
@@ -290,6 +292,18 @@ for file_num in range(len(file_list)):
                 ws["F%s" %excel_row] = compare_result
                 ws["I%s" %excel_row] = used_lc_result
                 ws["J%s" %excel_row] = high_lcpid
+                if hw_type == "WS-C4510R":
+                    ws["H%s" %excel_row] = "95"
+                else:
+                    if high_lcpid == "A9K-24x10GE-TR" or high_lcpid == "A9K-40GE-TR" or high_lcpid == "A99-12x100GE" or high_lcpid == "A9K-MOD400-TR":
+                        ws["H%s" %excel_row] = thnf
+                    elif high_lcpid == "A9K-24X10GE-TR" or high_lcpid == "A99-12X100GE" or high_lcpid == "A9K-24x10GE-SE" or high_lcpid == "A9K-24X10GE-SE" :
+                        ws["H%s" %excel_row] = thnf
+                    elif high_lcpid == "A9K-24x10GE-1G-TR" or high_lcpid == "A9K-48x10GE-1G-TR":
+                        ws["H%s" %excel_row] = thes
+                    elif high_lcpid == "A9K-24X10GE-1G-TR" or high_lcpid == "A9K-48X10GE-1G-TR":
+                        ws["H%s" %excel_row] = thes
+
         else:
             pass
     
