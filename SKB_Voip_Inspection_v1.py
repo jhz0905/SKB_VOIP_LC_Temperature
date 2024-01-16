@@ -327,3 +327,10 @@ for file_num in range(len(file_list)):
 
 print("### Inspection Successful ###")
 input("Press enter to exit ;)")
+
+
+#Warning Threshold#
+#show enviroment table
+
+#STT(Shutdown) Threshold#
+#show diag 0/x/CPU0 eeprom-info
