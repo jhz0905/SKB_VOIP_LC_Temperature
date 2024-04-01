@@ -119,8 +119,8 @@ for file_num in range(len(file_list)):
             else:
                 pass
 
-        for tem_start2 in range(len(log_line)):
-            tem_pattern2 = r'^\w\w/\d/\w\w\d/\w\w\w\d:.*#show environment table$'
+        for tem_start2 in range(tem_line1 +1, len(log_line)):
+            tem_pattern2 = r'^\w\w/\d/\w\w\d/\w\w\w\d:.*#'
             tem_result2 = re.search(tem_pattern2, log_line[tem_start2])
             if tem_result2 != None:
                 tem_line2 = tem_start2
@@ -165,8 +165,8 @@ for file_num in range(len(file_list)):
             else:
                 pass
         
-        for pid_stop in range(len(log_line)):
-            pid_pattern = r'^\w*/\d/\w*\d/\w*\d:.*#show environment temperatures$'
+        for pid_stop in range(pid_line1 + 1, len(log_line)):
+            pid_pattern = r'^\w*/\d/\w*\d/\w*\d:.*#'
             pid_result = re.search(pid_pattern, log_line[pid_stop])
             if pid_result != None:
                 pid_line2 = pid_stop
