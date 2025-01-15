@@ -131,24 +131,24 @@ for file_num in range(len(file_list)):
             else:
                 pass
 
-        for search_lc in range(tem_line1, tem_line2): #위에서 지정한 첫 번째 > 마지막 열 까지 로그 검색을 실행
-            lc_pattern = r'^\d/\d/.$' #라인카드 번호 확인을 위해 검색 (ex. 0/5/CPU0)
+        for search_lc in range(tem_line1, tem_line2): # 위에서 지정한 첫 번째 > 마지막 열 까지 로그 검색을 실행
+            lc_pattern = r'^\d/\d/.$' # 라인카드 번호 확인을 위해 검색 (ex. 0/5/CPU0)
             lc_result = re.search(lc_pattern, log_line[search_lc])
             if lc_result != None:
                 lc_list = lc_result.group()
-                lc_list = lc_list.split(sep = "/", maxsplit = 2)
-                lc_slot.append(lc_list[1])
+                lc_list = lc_list.split(sep = "/", maxsplit = 2) # 0/5/CPU0에서 "5"만 걸러내기 위한 split 구문
+                lc_slot.append(lc_list[1]) # lc_slot 리스트에 현재 실장 된 라인카드의 번호를 순차적으로 저장
             else:
                 pass
 
         for search_tem in range(tem_line1, tem_line2):
-            lctem_pattern = r'^\s*host\s*Hotspot0\s*\d\d.\d$'
+            lctem_pattern = r'^\s*host\s*Hotspot0\s*\d\d.\d$' # 라인카드 별 실시간 온도 조사 및 검색
             lctem_result = re.search(lctem_pattern, log_line[search_tem])
             if lctem_result != None: 
                 lctem_list = lctem_result.group()
-                lctem_pattern = r'\d{2,3}.\d'
+                lctem_pattern = r'\d{2,3}.\d' #온도 검색 (소수점 1자리 까지)
                 lctem_result2 = re.search(lctem_pattern, lctem_list)
-                lctem_list = lctem_result2.group()
+                lctem_list = lctem_result2.group() # lctem_list에 split 된 온도를 저장
                 #lctem_list = lctem_list.split(sep = " ")
                 #lctem_list = lctem_list[28]
                 if tem_num <= 1:
