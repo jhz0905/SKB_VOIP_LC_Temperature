@@ -40,6 +40,7 @@ for file_num in range(len(file_list)):
     log_file.close()
 
     ### OS ###
+    # show version 기반으로 해당 라우터의 운영체제를 검색 함.
     for os_parsing in range(len(log_line)):
         os_pattern = r'^Cisco\s(IOS|Internetwork Operating System|IOS XR)\sSoftware'
         os_result = re.search(os_pattern, log_line[os_parsing])
@@ -50,34 +51,35 @@ for file_num in range(len(file_list)):
             pass
 
     ### Hostname ###
+    # ios-xr일 경우 해당 if 에 match 됨.
     if os_name == "Cisco IOS XR Software":
         for host_parsing in range(len(log_line)):
-            host_pattern = r'^\w\w/\d/\w\w\d/\w\w\w\d:.*#show version brief$'
+            host_pattern = r'^\w\w/\d/\w\w\d/\w\w\w\d:.*#show version brief$' #show version brief 라는 문자열을 매치해서 hostname을 검색
             host_result = re.search(host_pattern, log_line[host_parsing])
             if host_result != None:
                 hostname = host_result.group()
-                hostname = hostname.split(sep = ":", maxsplit = 1)
-                hostname = hostname[1]
-                hostname = hostname.split(sep = "#", maxsplit = 1)
-                hostname = hostname[0]
-                hw_type = "ASR-9912"
-                break
+                hostname = hostname.split(sep = ":", maxsplit = 1) # : 문자를 기준으로 하나의 문자열을 두개로 나눔
+                hostname = hostname[1] # 나눠진 두개의 문자열 중 2번째 문자열 선택
+                hostname = hostname.split(sep = "#", maxsplit = 1) # 선택한 문자열을 # 기준으로 두개로 나눔
+                hostname = hostname[0] # 나눠진 두개의 문자열 중 첫번째 문자열 선택
+                hw_type = "ASR-9912" # 교환망은 ios-xr을 사용하는 라우터가 ASR-9912 밖에 없어서 hw-type는 수동으로 입력
+                break # show version brief 라는 문자열 검색에 성공하면 문자열 검색 중지
             else:
-                pass
+                pass # show version brief 라는 문자열을 찾을 때 까지 반복
 
-        if os.path.exists("%s\%s.txt" %(str(nextdir),hostname)) == True:
-            if file_list[file_num] != "%s.txt" %hostname:
-                os.remove("%s\%s" %(str(nextdir),file_list[file_num]))
-                print("####### remove %s(%s) #######" %(hostname, file_list[file_num]))
-        else:
-            os.rename("%s" %file_list[file_num],"%s.txt" %hostname)
+        if os.path.exists("%s\%s.txt" %(str(nextdir),hostname)) == True: # 로그 파일 중복 검색(만약 동일한 장비의 로그가 2개 있으면 해당 조건 match)
+            if file_list[file_num] != "%s.txt" %hostname: # 현재 코드에서 open 된 log 파일의 이름이 hostname이 아니라면 
+                os.remove("%s\%s" %(str(nextdir),file_list[file_num])) # 기존에 hostname으로 저장 된 log 파일 삭제
+                print("####### remove %s(%s) #######" %(hostname, file_list[file_num])) # 현재 코드에서 open 된 log 파일의 이름을 hostname으로 변경 
+        else: # 로그 파일이 중복 된 상태가 아니라면
+            os.rename("%s" %file_list[file_num],"%s.txt" %hostname) # 현재 코드에서 open 된 log 파일의 이름을 hostname으로 변경
 
         #os.rename("%s" %file_list[file_num],"%s.txt" %hostname)
         print("Filename %s -> %s.txt" %(file_list[file_num], hostname))
 
-    else:
+    else: #ios-xr 을 제외한 나머지 장비는 해당 조건에 match (C6509 / C7609 / etc..)
         for host_parsing in range(len(log_line)):
-            host_pattern = r'^.*#show version(|\s*)$'
+            host_pattern = r'^.*#show version(|\s*)$' 
             host_result = re.search(host_pattern, log_line[host_parsing])
             if host_result != None:
                 hostname = host_result.group()
@@ -98,12 +100,12 @@ for file_num in range(len(file_list)):
         print("Filename %s -> %s.txt" %(file_list[file_num], hostname))
 
         for hw_parsing in range(len(log_line)):
-            hw_pattern = r'^PID:\s.*\s*.*$'
+            hw_pattern = r'^PID:\s.*\s*.*$' #장비의 hw-type을 검색하기 위한 조건 (ex. WS-C6509E / WS-C7609S / etc..)
             hw_result = re.search(hw_pattern, log_line[hw_parsing])
             if hw_result != None:
                 hw_type = hw_result.group()
-                hw_type = hw_type.split(sep = " ", maxsplit = 2)
-                hw_type = hw_type[1]
+                hw_type = hw_type.split(sep = " ", maxsplit = 2) # 공백을 기준으로 문자열을 3개로 나눔.
+                hw_type = hw_type[1] # 3개로 나뉜 문자열 중 2번째 문자열 선택
                 break
             else:
                 pass
