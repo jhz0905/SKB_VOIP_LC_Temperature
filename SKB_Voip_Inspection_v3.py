@@ -112,9 +112,9 @@ for file_num in range(len(file_list)):
 
 ### Part. ASR9912 ###    
 
-    if hw_type == "ASR-9912":
+    if hw_type == "ASR-9912": # hw-type이 asr9912 인 장비들의 온도 조사를 위한 조건문
         for tem_start1 in range(len(log_line)):
-            tem_pattern1 = r'^\w\w/\d/\w\w\d/\w\w\w\d:.*#show environment temperatures$'
+            tem_pattern1 = r'^\w\w/\d/\w\w\d/\w\w\w\d:.*#show environment temperatures$' # 로그 중 온도 조사를 위해 확인이 필요한 부분을 발췌하기 위해 첫번째 열 지정 
             tem_result1 = re.search(tem_pattern1, log_line[tem_start1])
             if tem_result1 != None:
                 tem_line1 = tem_start1
@@ -123,7 +123,7 @@ for file_num in range(len(file_list)):
                 pass
 
         for tem_start2 in range(tem_line1 +1, len(log_line)):
-            tem_pattern2 = r'^\w\w/\d/\w\w\d/\w\w\w\d:.*#'
+            tem_pattern2 = r'^\w\w/\d/\w\w\d/\w\w\w\d:.*#' # 로그 중 온도 조사를 위해 확인이 필요한 부분을 발췌하기 위해 마지막 열 지정 
             tem_result2 = re.search(tem_pattern2, log_line[tem_start2])
             if tem_result2 != None:
                 tem_line2 = tem_start2
@@ -131,8 +131,8 @@ for file_num in range(len(file_list)):
             else:
                 pass
 
-        for search_lc in range(tem_line1, tem_line2):
-            lc_pattern = r'^\d/\d/.$'
+        for search_lc in range(tem_line1, tem_line2): #위에서 지정한 첫 번째 > 마지막 열 까지 로그 검색을 실행
+            lc_pattern = r'^\d/\d/.$' #라인카드 번호 확인을 위해 검색 (ex. 0/5/CPU0)
             lc_result = re.search(lc_pattern, log_line[search_lc])
             if lc_result != None:
                 lc_list = lc_result.group()
